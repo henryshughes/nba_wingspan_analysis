@@ -63,7 +63,7 @@ for i in range(len(wingspan_list_string)):
     wingspan_list_int.append(round(total_feet, 2))
     
 
-plt.plot(height_list_int, wingspan_list_int, 'ko', markersize = 2)
+plt.plot(height_list_int, wingspan_list_int, 'ko', markersize = 1)
 plt.plot([5.8, 8], [5.8, 8], linewidth=2)
 plt.plot([5.8, 8], [6.2, 8.4], linewidth=2)
 
