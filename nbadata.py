@@ -1,9 +1,10 @@
+#Imports, including requests, matplotlib, beautifulsoup, and selenium
 import requests
 import matplotlib.pyplot as plt
 from bs4 import BeautifulSoup
 from selenium import webdriver
 
-
+#Open the URL
 url = 'https://craftednba.com/player-traits/length'
 
 driver = webdriver.Chrome()
@@ -11,23 +12,29 @@ driver.get(url)
 
 page = driver.page_source
 
+#Create string lists for height and wingspan
 height_list_string = []
 wingspan_list_string = []
 
+#Create floating point lists for height and wingspan
 height_list_int = []
 wingspan_list_int = []
 
+#Parse the HTML content
 soup = BeautifulSoup(page, 'html.parser')
 
+#Create rows of table data
 for employee_data in soup.find_all('tbody'):
    rows = employee_data.find_all('tr')
    
+#Pull out the wingspan and height data
 for row in rows:
     height = row.find_all('td')[3].text
     height_list_string.append(height)
     wingspan = row.find_all('td')[4].text
     wingspan_list_string.append(wingspan)
 
+#Loop to turn the list item from strings into floating point values
 for i in range(len(height_list_string)):
       # Split the string into feet and inches components
 
@@ -44,9 +51,10 @@ for i in range(len(height_list_string)):
     total_feet = total_inches/12
 
     height_list_int.append(round(total_feet, 2))
-    
+
+#Loop to turn the list item from strings into floating point values
 for i in range(len(wingspan_list_string)):
-      # Split the string into feet and inches components
+    # Split the string into feet and inches components
 
     feet_str, inches_str = wingspan_list_string[i].split("\'")
 
@@ -62,7 +70,7 @@ for i in range(len(wingspan_list_string)):
 
     wingspan_list_int.append(round(total_feet, 2))
     
-
+#Plot using matplotlib
 plt.plot(height_list_int, wingspan_list_int, 'ko', markersize = 1)
 plt.plot([5.8, 8], [5.8, 8], linewidth=2)
 plt.plot([5.8, 8], [6.2, 8.4], linewidth=2)
