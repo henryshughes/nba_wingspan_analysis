@@ -1,5 +1,6 @@
 #Imports, including requests, matplotlib, beautifulsoup, and selenium
 import requests
+import math
 import matplotlib.pyplot as plt
 from bs4 import BeautifulSoup
 from selenium import webdriver
@@ -15,10 +16,7 @@ page = driver.page_source
 #Create string lists for height and wingspan
 height_list_string = []
 wingspan_list_string = []
-
-#Create floating point lists for height and wingspan
-height_list_int = []
-wingspan_list_int = []
+difference_list_string = []
 
 #Parse the HTML content
 soup = BeautifulSoup(page, 'html.parser')
@@ -29,6 +27,8 @@ for employee_data in soup.find_all('tbody'):
    
 #Pull out the wingspan and height data
 for row in rows:
+    difference = row.find_all('td')[2].text
+    difference_list_string.append(difference)
     height = row.find_all('td')[3].text
     height_list_string.append(height)
     wingspan = row.find_all('td')[4].text
@@ -56,10 +56,32 @@ def convert_list(input_list):
 
     return output_list
 
+def convert_to_integer(input_list):
+
+    for i in range(len(input_list)):
+        input_list[i] = float(input_list[i])
+
+    return input_list
+
 #Convert lists
 height_list_int = convert_list(height_list_string)
 wingspan_list_int = convert_list(wingspan_list_string)
+difference_list_int = convert_to_integer(difference_list_string)
 
+
+min_value = int(math.ceil(abs((min(difference_list_int)))) * math.copysign(1, (min(difference_list_int))))
+max_value = int(math.ceil(abs((max(difference_list_int)))) * math.copysign(1, (max(difference_list_int))))
+
+x_values = range(min_value, max_value)
+
+
+plt.bar(x_values, heights)
+plt.show()
+
+
+
+
+'''
 #Plot using matplotlib
 plt.plot(height_list_int, wingspan_list_int, 'ko', markersize = 1)
 plt.plot([5.8, 8], [5.8, 8], linewidth=2)
@@ -76,3 +98,4 @@ plt.title('Wingspan vs Height')
 plt.xlim(5.8, 8)
 plt.ylim(5.8, 8)
 plt.show()
+'''
