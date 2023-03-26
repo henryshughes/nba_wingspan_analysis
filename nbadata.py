@@ -75,11 +75,24 @@ max_value = int(math.ceil(abs((max(difference_list_int)))) * math.copysign(1, (m
 x_values = range(min_value, max_value)
 
 
-plt.bar(x_values, heights)
+def count_numbers_in_range(numbers_list, range_start, range_end, interval=1):
+    count_list = []
+    for i in range(range_start, range_end+1, interval):
+        count = 0
+        for j in numbers_list:
+            if i <= j < i+interval:
+                count += 1
+        count_list.append(count)
+    return count_list
+
+grouped_heights = count_numbers_in_range(difference_list_int, min_value, max_value, 1)
+del(grouped_heights[-1])
+
+plt.title('Wingspan to Height Differential of NBA Players')
+plt.xlabel('Inch Differential Relative to Height')
+plt.ylabel('Number of Players')
+plt.bar(x_values, grouped_heights)
 plt.show()
-
-
-
 
 '''
 #Plot using matplotlib
